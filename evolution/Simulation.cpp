@@ -7,8 +7,8 @@ void Simulation::onValueChange(float value)
     std::cout << value << std::endl;
 }
 
-Simulation::Simulation(uint32_t numPeople, float infProb, uint32_t infDur)
-    : population{ infProb, infDur, sf::Vector2u(1280, 640)}, window { sf::VideoMode{ 1280, 720 }, "Virus", sf::Style::Titlebar | sf::Style::Close }
+Simulation::Simulation(float mortality, float infProb, uint32_t incTime, uint32_t infDur)
+    : population{ sf::Vector2u(1280, 640) }, virus{ mortality, infProb, incTime, infDur }, window{sf::VideoMode{1280, 720}, "Virus", sf::Style::Titlebar | sf::Style::Close}
 {
     gui.setWindow(window);
 }
@@ -74,7 +74,7 @@ void Simulation::initializeUI()
         return subGroup;
     };
 
-    auto test = createSliderWithLabel([this](float value){ this->onValueChange(value); }, "test", { 0, 5 });
+    auto test = createSliderWithLabel([this](float value){ this->onValueChange(value); }, "test", { 0, 10 });
     mainGroup->add(test);
     gui.add(mainGroup);
 }

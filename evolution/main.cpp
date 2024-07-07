@@ -6,8 +6,14 @@
 
 
 int main() {
-    srand(static_cast<unsigned>(time(0)));
-    Simulation simulation(100, 0.1, 500);
+    srand(time(0));
+
+    const float mortality = 0.1f;
+    const float infectionProbability = 0.5f;
+    const uint32_t incubationTime = 5;
+    const uint32_t infectionDuration = 5;
+
+    Simulation simulation{ mortality, infectionProbability, incubationTime, infectionDuration };
     simulation.run();
     return 0;
 }

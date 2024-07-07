@@ -13,12 +13,11 @@ private:
     sf::Vector2u numPeople;
 
 public:
-    Field(float infProb, uint32_t infDur, sf::Vector2u windowSize);
+    Field(sf::Vector2u windowSize);
 
     void update();
 
     void draw(sf::RenderWindow& window);
 
-    void checkInfections();
 };
 

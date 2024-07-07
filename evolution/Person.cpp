@@ -3,7 +3,7 @@
 
 Person::Person(uint32_t id, sf::Vector2f startPos)
     : id{ id }, position{ startPos }, infected{ false }, recovered{ false }, 
-    infectionDuration{ }, timeInfected{ }, color{ sf::Color::Green } 
+    infectionDuration{ }, timeInfected{ }, color{ 238, 238, 238 }
 {
 
     

@@ -1,8 +1,7 @@
 #include "Field.h"
 
 
-Field::Field(float infProb, uint32_t infDur, sf::Vector2u windowSize)
-    : infectionProbability{ infProb }, infectionDuration{ infDur }
+Field::Field(sf::Vector2u windowSize)
 {
     const sf::Vector2u numPeople{ windowSize.x / Person::getSize(), windowSize.y / Person::getSize() };
     this->numPeople = numPeople;
@@ -29,7 +28,6 @@ void Field::update()
             person.updateStatus();
         }
     }
-    checkInfections();
 }
 
 void Field::draw(sf::RenderWindow& window)
@@ -40,30 +38,4 @@ void Field::draw(sf::RenderWindow& window)
             person.draw(window);
 }
 
-void Field::checkInfections()
-{
-    for (auto& raw : people)
-    {
-        for (auto& person : raw)
-        {
-            if (person.isInfected() && !person.isRecovered())
-            {
-                for (auto& raw : people)
-                {
-                    for (auto& other : raw)
-                    {
-                        if (&person != &other && !other.isInfected())
-                        {
-                            float distance = sqrt(pow(person.getPosition().x - other.getPosition().x, 2) +
-                                pow(person.getPosition().y - other.getPosition().y, 2));
-                            if (distance < 10 && static_cast<float>(rand()) / static_cast<float>(RAND_MAX) < infectionProbability)
-                            {
-                                other.infect(infectionDuration);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
+

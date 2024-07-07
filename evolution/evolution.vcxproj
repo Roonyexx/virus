@@ -136,11 +136,13 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Person.cpp" />
     <ClCompile Include="Simulation.cpp" />
+    <ClCompile Include="Virus.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Field.h" />
     <ClInclude Include="Person.h" />
     <ClInclude Include="Simulation.h" />
+    <ClInclude Include="Virus.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
