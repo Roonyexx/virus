@@ -1,5 +1,6 @@
 #pragma once
-#include <SFML/Graphics.hpp>
+#include <TGUI/Backend/SFML-Graphics.hpp>
+#include <TGUI/TGUI.hpp>
 #include <vector>
 #include <cstdlib>
 #include <ctime>
@@ -11,6 +12,9 @@ class Simulation {
 private:
     Field population;
     sf::RenderWindow window;
+    tgui::Gui gui;
+    
+    void onValueChange(float value);
     
 public:
     Simulation(uint32_t numPeople, float infProb, uint32_t infDur);
@@ -18,5 +22,7 @@ public:
     void run();
 
     void handleEvents();
+
+    void initializeUI();
 };
 
