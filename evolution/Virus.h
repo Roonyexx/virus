@@ -1,5 +1,7 @@
 #pragma once
 #include <stdint.h>
+#include <random>
+#include "Person.h"
 
 class Virus
 {
@@ -9,11 +11,12 @@ private:
 	uint32_t incubationTime;
 	uint32_t infectionDuration;
 
+	bool randomEvent(float probability);
 public:
 	Virus(float mortality, float infectionProbability, uint32_t incubationTime, uint32_t infectionDuration);
 	~Virus() {}
 
-
+	void infectionSpread(std::vector<std::vector<Person>>& people, Person& person);
 
 	void setMortality(float mortality);
 	float getMortality() const;
