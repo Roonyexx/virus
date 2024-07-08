@@ -1,22 +1,29 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include "Virus.h"
+
+typedef enum {
+    Healthy,
+    incubationPeriod,
+    Infected,
+    Recovered,
+    Dead
+} Status;
 
 class Person {
 private:
     uint32_t id;
     sf::Vector2f position;
-    sf::Color color;
-    bool infected;
-    bool recovered;
-    uint32_t infectionDuration;
     uint32_t timeInfected;
     static const uint32_t size{ 20 };
+    uint32_t walkRange;
+    Status status;
 
 public:
 
     Person() { }
 
-    Person(uint32_t id, sf::Vector2f startPos);
+    Person(uint32_t id, sf::Vector2f startPos, uint32_t walkRange);
 
     void move() {
         /*position.x += (rand() % 3 - 1) * 10;
@@ -27,13 +34,13 @@ public:
 
     void draw(sf::RenderWindow& window) const;
 
-    bool isInfected() const;
+    Status getStatus() const;
 
-    bool isRecovered() const;
+    void setStatus(Status status);
 
     sf::Vector2f getPosition() const;
 
-    void infect(uint32_t duration);
+    void infect();
 
     static uint32_t getSize();
 };

@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <ctime>
 #include "Person.h"
+#include "Virus.h"
 
 class Field {
 private:
@@ -13,7 +14,7 @@ private:
     sf::Vector2u numPeople;
 
 public:
-    Field(sf::Vector2u windowSize);
+    Field(sf::Vector2u windowSize, uint32_t walkRange);
 
     void update();
 

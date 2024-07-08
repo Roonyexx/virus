@@ -2,13 +2,9 @@
 #include <iostream>
 
 
-void Simulation::onValueChange(float value)
-{
-    std::cout << value << std::endl;
-}
 
-Simulation::Simulation(float mortality, float infProb, uint32_t incTime, uint32_t infDur)
-    : population{ sf::Vector2u(1280, 640) }, virus{ mortality, infProb, incTime, infDur }, window{sf::VideoMode{1280, 720}, "Virus", sf::Style::Titlebar | sf::Style::Close}
+Simulation::Simulation(float mortality, float infProb, uint32_t incTime, uint32_t infDur, uint32_t walkRange)
+    : population{ sf::Vector2u(1280, 640), walkRange }, virus{ mortality, infProb, incTime, infDur }, window{sf::VideoMode{1280, 720}, "Virus", sf::Style::Titlebar | sf::Style::Close}
 {
     gui.setWindow(window);
 }
@@ -25,6 +21,8 @@ void Simulation::run()
         population.draw(window);
         gui.draw();
         window.display();
+        static int i = 0;
+        std::cout << i++ << std::endl;
     }
 }
 
@@ -49,7 +47,7 @@ void Simulation::initializeUI()
     
 
     auto createSliderWithLabel = 
-        [](auto onValueChanged, const String& label, const sf::Vector2f position, const float min = 0, const float max = 10, const float startValue = 0.f, const float step = 0.1f) {
+        [](auto onValueChanged, const String& label, const sf::Vector2f position, const float min = 0, const float max = 10, const float startValue = 0.f, const float step = 0.1f, const uint32_t decimalPlaces = 0) {
         auto subGroup = Group::create();
         subGroup->setPosition(position.x, position.y);
 
@@ -57,12 +55,13 @@ void Simulation::initializeUI()
         labelWidget->setPosition(0, 0);
         labelWidget->setHorizontalAlignment(HorizontalAlignment::Center);
         labelWidget->setVerticalAlignment(VerticalAlignment::Bottom);
-        labelWidget->setTextSize(15);
+        labelWidget->setTextSize(10);
         labelWidget->getRenderer()->setTextColor(sf::Color::White);
         labelWidget->getRenderer()->setTextStyle(TextStyle::Bold);
 
 
-        auto slider = EditBoxSlider::create(min, max, startValue, 1, step);
+        auto slider = EditBoxSlider::create(min, max, startValue, decimalPlaces, step);
+        slider->setValue(startValue);
         slider->setPosition(5, 20);
         slider->onValueChange(onValueChanged);
 
@@ -74,7 +73,15 @@ void Simulation::initializeUI()
         return subGroup;
     };
 
-    auto test = createSliderWithLabel([this](float value){ this->onValueChange(value); }, "test", { 0, 10 });
-    mainGroup->add(test);
+    auto mortality = createSliderWithLabel([virus = &virus](float value){ virus->setMortality(value); }, "mortality", { 0, 10 }, 0, 1, virus.getMortality(), 0.01f, 2);
+    auto infProb = createSliderWithLabel([virus = &virus](float value){ virus->setInfectionProbability(value); }, "infection probability", { 160, 10 }, 0, 1, virus.getInfectionProbability(), 0.01f, 2);
+    auto incTime = createSliderWithLabel([virus = &virus](float value){ virus->setIncubationTime(value); }, "incubation time", { 320, 10 }, 0, 50, virus.getIncubationTime(), 0);
+    auto infDur = createSliderWithLabel([virus = &virus](float value){ virus->setInfectionDuration(value); }, "infection duration", { 480, 10 }, 1, 50, virus.getInfectionDuration(), 0);
+
+
+    mainGroup->add(mortality);
+    mainGroup->add(infProb);
+    mainGroup->add(incTime);
+    mainGroup->add(infDur);
     gui.add(mainGroup);
 }

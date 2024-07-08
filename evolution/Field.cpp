@@ -1,7 +1,7 @@
 #include "Field.h"
 
 
-Field::Field(sf::Vector2u windowSize)
+Field::Field(sf::Vector2u windowSize, uint32_t walkRange)
 {
     const sf::Vector2u numPeople{ windowSize.x / Person::getSize(), windowSize.y / Person::getSize() };
     this->numPeople = numPeople;
@@ -13,21 +13,23 @@ Field::Field(sf::Vector2u windowSize)
         people[i].resize(numPeople.x);
         for (uint32_t j{ }; j < numPeople.x; ++j)
         {
-            people[i][j] = Person(id++, sf::Vector2f(j * Person::getSize(), i * Person::getSize()));
+            people[i][j] = Person(id++, sf::Vector2f(j * Person::getSize(), i * Person::getSize()), walkRange);
         }
     }
 }
 
 void Field::update()
 {
-    for (auto& raw : people) 
-    {
-        for (auto& person : raw)
-        {
-            person.move();
-            person.updateStatus();
-        }
-    }
+    //for (auto& raw : people) 
+    //{
+    //    for (auto& person : raw)
+    //    {
+    //        person.move();
+    //        person.updateStatus();
+    //    }
+    //}
+
+
 }
 
 void Field::draw(sf::RenderWindow& window)

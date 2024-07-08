@@ -16,12 +16,9 @@ private:
     sf::RenderWindow window;
     tgui::Gui gui;
     
-    void onValueChange(float value);
-    
-    //(float mortality, float infectionProbability, uint32_t incubationTime, uint32_t infectionDuration)
 
 public:
-    Simulation(float mortality, float infProb, uint32_t incTime, uint32_t infDur);
+    Simulation(float mortality, float infProb, uint32_t incTime, uint32_t infDur, uint32_t walkRange);
 
     void run();
 

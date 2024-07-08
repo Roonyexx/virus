@@ -9,9 +9,11 @@ private:
 	uint32_t incubationTime;
 	uint32_t infectionDuration;
 
-
 public:
 	Virus(float mortality, float infectionProbability, uint32_t incubationTime, uint32_t infectionDuration);
+	~Virus() {}
+
+
 
 	void setMortality(float mortality);
 	float getMortality() const;
@@ -24,7 +26,5 @@ public:
 
 	void setInfectionDuration(uint32_t infectionDuration);
 	uint32_t getInfectionDuration() const;
-
-	~Virus() {}
 };
 
