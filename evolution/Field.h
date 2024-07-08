@@ -16,7 +16,7 @@ private:
 public:
     Field(sf::Vector2u windowSize, uint32_t walkRange);
 
-    void update();
+    void update(Virus& virus);
 
     void draw(sf::RenderWindow& window);
 

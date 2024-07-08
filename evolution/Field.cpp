@@ -13,22 +13,23 @@ Field::Field(sf::Vector2u windowSize, uint32_t walkRange)
         people[i].resize(numPeople.x);
         for (uint32_t j{ }; j < numPeople.x; ++j)
         {
-            people[i][j] = Person(id++, sf::Vector2f(j * Person::getSize(), i * Person::getSize()), walkRange);
+            people[i][j] = Person{ id++, sf::Vector2f(j * Person::getSize(), i * Person::getSize()), walkRange, numPeople };
+            if(i == numPeople.y / 2 && j == numPeople.x / 2) people[i][j].setStatus(Status::incubationPeriod);
         }
     }
 }
 
-void Field::update()
+void Field::update(Virus& virus)
 {
-    //for (auto& raw : people) 
-    //{
-    //    for (auto& person : raw)
-    //    {
-    //        person.move();
-    //        person.updateStatus();
-    //    }
-    //}
-
+    for (auto& raw : people) 
+    {
+        for (auto& person : raw)
+        {
+            if (person.getStatus() == Status::incubationPeriod || person.getStatus() == Status::Infected)
+                virus.infectionSpread(people, person);
+            person.updateStatus();
+        }
+    }
 
 }
 
@@ -39,5 +40,3 @@ void Field::draw(sf::RenderWindow& window)
         for (const auto& person : raw)
             person.draw(window);
 }
-
-

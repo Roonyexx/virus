@@ -16,13 +16,11 @@ void Simulation::run()
     while (window.isOpen()) 
     {
         handleEvents();
-        population.update();
+        population.update(virus);
         window.clear({ 30, 30, 30 });
         population.draw(window);
         gui.draw();
         window.display();
-        static int i = 0;
-        std::cout << i++ << std::endl;
     }
 }
 

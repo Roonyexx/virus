@@ -1,6 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "Virus.h"
+#include <random>
 
 typedef enum {
     Healthy,
@@ -16,19 +16,16 @@ private:
     sf::Vector2f position;
     uint32_t timeInfected;
     static const uint32_t size{ 20 };
-    uint32_t walkRange;
+    std::pair<uint32_t, uint32_t> lowerPossibleBound, upperPossibleBound;
     Status status;
 
 public:
 
     Person() { }
 
-    Person(uint32_t id, sf::Vector2f startPos, uint32_t walkRange);
+    Person(uint32_t id, sf::Vector2f startPos, uint32_t walkRange, sf::Vector2u fieldSize);
 
-    void move() {
-        /*position.x += (rand() % 3 - 1) * 10;
-        position.y += (rand() % 3 - 1) * 10;*/
-    }
+    std::pair<uint32_t, uint32_t> choosePosition() const;
 
     void updateStatus();
 
