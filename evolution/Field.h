@@ -9,8 +9,6 @@
 class Field {
 private:
     std::vector<std::vector<Person>> people;
-    float infectionProbability;
-    uint32_t infectionDuration;
     sf::Vector2u numPeople;
 
 public:

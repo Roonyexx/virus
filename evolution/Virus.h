@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include <random>
 #include "Person.h"
+#include "Hospital.h"
 
 class Virus
 {
@@ -11,7 +12,6 @@ private:
 	uint32_t incubationTime;
 	uint32_t infectionDuration;
 
-	bool randomEvent(float probability);
 public:
 	Virus(float mortality, float infectionProbability, uint32_t incubationTime, uint32_t infectionDuration);
 	~Virus() {}

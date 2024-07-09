@@ -1,14 +1,7 @@
 #include "Virus.h"
 #include <iostream>
 
-bool Virus::randomEvent(float probability)
-{
-	static std::random_device rd;
-	static std::mt19937 gen(rd());
-	std::uniform_real_distribution<> dis(0, 1); 
 
-	return dis(gen) < probability;
-}
 
 Virus::Virus(float mortality, float infectionProbability, uint32_t incubationTime, uint32_t infectionDuration) :
 	mortality{ mortality }, infectionProbability{ infectionProbability }, incubationTime{ incubationTime }, infectionDuration{ infectionDuration }
@@ -79,11 +72,12 @@ void updateStatus(Virus& virus, Person& person)
 		break;
 
 	case Status::Infected:
+	case Status::inHospital:
 		if (person.timeInfected < virus.infectionDuration)
 			person.timeInfected++;
 		else if (person.timeInfected == virus.infectionDuration)
 		{
-			if (virus.randomEvent(virus.mortality))
+			if (randomEvent(virus.mortality))
 			{
 				person.setStatus(Status::Dead);
 			}

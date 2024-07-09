@@ -3,11 +3,14 @@
 #include <random>
 
 class Virus;
+class Hospital;
+bool randomEvent(float probability);
 
 typedef enum {
     Healthy,
     incubationPeriod,
     Infected,
+    inHospital,
     Recovered,
     Dead
 } Status;
@@ -30,7 +33,7 @@ public:
 
     std::pair<uint32_t, uint32_t> choosePosition() const;
 
-    void draw(sf::RenderWindow& window) ;
+    void draw(sf::RenderWindow& window);
 
     Status getStatus() const;
 

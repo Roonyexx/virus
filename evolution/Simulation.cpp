@@ -102,9 +102,9 @@ void Simulation::initializeUI()
 
     auto mortality = createSliderWithLabel([virus = &virus](float value){ virus->setMortality(value); }, "mortality", { 0, 50 }, 0, 1, virus.getMortality(), 0.01f, 2);
     auto infProb = createSliderWithLabel([virus = &virus](float value){ virus->setInfectionProbability(value); }, "infection probability", { 0, 100 }, 0, 1, virus.getInfectionProbability(), 0.01f, 2);
-    auto incTime = createSliderWithLabel([virus = &virus](float value){ virus->setIncubationTime(value); }, "incubation time", { 0, 150 }, 0, 50, virus.getIncubationTime(), 0);
-    auto infDur = createSliderWithLabel([virus = &virus](float value){ virus->setInfectionDuration(value); }, "infection duration", { 0, 200 }, 1, 50, virus.getInfectionDuration(), 0);
-    auto walkRange = createSliderWithLabel([this, population = &population](float value){ this->walkRange = (int)value; population->setWalkRange(this->walkRange); }, "walk range", { 0, 250 }, 0, 50, this->walkRange, 0);
+    auto incTime = createSliderWithLabel([virus = &virus](float value){ virus->setIncubationTime(round(value)); }, "incubation time", { 0, 150 }, 0, 50, virus.getIncubationTime(), 0);
+    auto infDur = createSliderWithLabel([virus = &virus](float value){ virus->setInfectionDuration(round(value)); }, "infection duration", { 0, 200 }, 1, 50, virus.getInfectionDuration(), 0);
+    auto walkRange = createSliderWithLabel([this, population = &population](float value){ this->walkRange = round(value); population->setWalkRange(this->walkRange); }, "walk range", { 0, 250 }, 0, 50, this->walkRange, 0);
 
 
     mainGroup->add(mortality);

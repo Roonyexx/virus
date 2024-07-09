@@ -30,7 +30,6 @@ void Field::update(Virus& virus)
             updateStatus(virus, person);
         }
     }
-
 }
 
 void Field::draw(sf::RenderWindow& window)

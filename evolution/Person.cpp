@@ -40,6 +40,10 @@ void Person::setStatus(Status status)
         shape.setFillColor({ 255, 0, 0 });
         break;
 
+    case Status::inHospital:
+        shape.setFillColor({ 30, 199, 85 });
+        break;
+
     case Status::Recovered:
         shape.setFillColor({ 50, 205, 209 });
         break;
@@ -91,4 +95,12 @@ void Person::setWalkRange(uint32_t walkRange, sf::Vector2u fieldSize)
 
     lowerPossibleBound = lowerBound;
     upperPossibleBound = upperBound;
+}
+
+bool randomEvent(float probability) 
+{
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+    std::uniform_real_distribution<> dis(0, 1);
+    return dis(gen) < probability;
 }

@@ -23,7 +23,6 @@ private:
 public:
     Simulation(float mortality, float infProb, uint32_t incTime, uint32_t infDur, uint32_t walkRange); 
 
-
     void run();
 
     void handleEvents();
