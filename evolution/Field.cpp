@@ -40,3 +40,11 @@ void Field::draw(sf::RenderWindow& window)
         for (auto& person : raw)
             person.draw(window);
 }
+
+void Field::setWalkRange(uint32_t walkRange)
+{
+    for (auto& raw : people)
+        for (auto& person : raw)
+            person.setWalkRange(walkRange, numPeople);
+}
+

@@ -46,5 +46,7 @@ public:
     static uint32_t getSize();
 
     friend void updateStatus(Virus& virus, Person& person);
+
+    void setWalkRange(uint32_t walkRange, sf::Vector2u fieldSize);
 };
 

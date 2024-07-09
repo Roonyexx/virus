@@ -20,5 +20,7 @@ public:
 
     void draw(sf::RenderWindow& window);
 
+    void setWalkRange(uint32_t walkRange);
+
 };
 
