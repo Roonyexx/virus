@@ -60,7 +60,7 @@ uint32_t Virus::getInfectionDuration() const
 	return infectionDuration;
 }
 
-void updateStatus(Virus& virus, Person& person)
+void updateStatus(Virus& virus, Person& person, Hospital* hospital)
 {
 	switch (person.status)
 	{
@@ -68,7 +68,11 @@ void updateStatus(Virus& virus, Person& person)
 		if (person.timeInfected < virus.incubationTime)
 			person.timeInfected++;
 		else if (person.timeInfected == virus.incubationTime)
-			{ person.setStatus(Status::Infected); person.timeInfected = 0; }
+			{ 
+				person.setStatus(Status::Infected); 
+				person.timeInfected = 0; 
+				if (randomEvent(0.7f)) hospital->addPerson(person);
+			}
 		break;
 
 	case Status::Infected:
@@ -77,6 +81,7 @@ void updateStatus(Virus& virus, Person& person)
 			person.timeInfected++;
 		else if (person.timeInfected == virus.infectionDuration)
 		{
+			if (person.getStatus() == Status::inHospital) hospital->inHospital--;
 			if (randomEvent(virus.mortality))
 			{
 				person.setStatus(Status::Dead);

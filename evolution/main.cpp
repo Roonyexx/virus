@@ -13,8 +13,9 @@ int main() {
     const uint32_t incubationTime = 7;
     const uint32_t infectionDuration = 8;
     const uint32_t walkRange = 3;
+    const uint32_t hospitalCapacity = 0;
 
-    Simulation simulation{ mortality, infectionProbability, incubationTime, infectionDuration, walkRange };
+    Simulation simulation{ mortality, infectionProbability, incubationTime, infectionDuration, walkRange, hospitalCapacity };
     simulation.run();
     return 0;
 }

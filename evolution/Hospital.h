@@ -19,5 +19,9 @@ public:
 	bool isFreeRoom() const;
 
 	void Heal(Person& person, float mortalityChance);
+
+	void setCapacity(uint32_t capacity);
+
+	friend void updateStatus(Virus& virus, Person& person, Hospital* hospital);
 };
 

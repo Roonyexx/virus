@@ -3,8 +3,10 @@
 
 
 
-Simulation::Simulation(float mortality, float infProb, uint32_t incTime, uint32_t infDur, uint32_t walkRange)
-    : population{ sf::Vector2u(1120, 720), walkRange }, virus{ mortality, infProb, incTime, infDur }, window{ sf::VideoMode{ 1280, 720 }, "Virus", sf::Style::Titlebar | sf::Style::Close }, walkRange{ walkRange }
+Simulation::Simulation(float mortality, float infProb, uint32_t incTime, uint32_t infDur, uint32_t walkRange, uint32_t hospitalCapacity)
+    : population{ sf::Vector2u(1120, 720), walkRange, &hospital }, virus{ mortality, infProb, incTime, infDur }, 
+    window{ sf::VideoMode{ 1280, 720 }, "Virus", sf::Style::Titlebar | sf::Style::Close }, walkRange{ walkRange },
+    hospital{ hospitalCapacity }
 {
     gui.setWindow(window);
 }
@@ -16,7 +18,7 @@ void Simulation::step()
 
 void Simulation::reset()
 {
-    Field newPopulation{ sf::Vector2u(1120, 720), walkRange };
+    Field newPopulation{ sf::Vector2u(1120, 720), walkRange, &hospital };
     population = newPopulation;
     paused = true;
 }
@@ -42,8 +44,19 @@ void Simulation::handleEvents()
     while (window.pollEvent(event)) {
         gui.handleEvent(event);
 
-        if (event.type == sf::Event::Closed) {
+        if (event.type == sf::Event::Closed) 
+        {
             window.close();
+        }
+
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+        {
+                sf::Vector2i pos{ sf::Mouse::getPosition(window) };
+                Person* p{ population.findPerson(pos) };
+                if (p != nullptr && p->getStatus() == Status::Healthy)
+                {
+                    p->setStatus(Status::incubationPeriod);
+                }
         }
     }
 }
@@ -105,12 +118,15 @@ void Simulation::initializeUI()
     auto incTime = createSliderWithLabel([virus = &virus](float value){ virus->setIncubationTime(round(value)); }, "incubation time", { 0, 150 }, 0, 50, virus.getIncubationTime(), 0);
     auto infDur = createSliderWithLabel([virus = &virus](float value){ virus->setInfectionDuration(round(value)); }, "infection duration", { 0, 200 }, 1, 50, virus.getInfectionDuration(), 0);
     auto walkRange = createSliderWithLabel([this, population = &population](float value){ this->walkRange = round(value); population->setWalkRange(this->walkRange); }, "walk range", { 0, 250 }, 0, 50, this->walkRange, 0);
-
+    auto hospitalCapacity = createSliderWithLabel([hospital = &hospital, population = &population](float value) { 
+        hospital->setCapacity(population->percentToPeople(round(value)));
+    }, "hospital capacity", { 0, 300 }, 0, 100, 0, 0);
 
     mainGroup->add(mortality);
     mainGroup->add(infProb);
     mainGroup->add(incTime);
     mainGroup->add(infDur);
     mainGroup->add(walkRange);
+    mainGroup->add(hospitalCapacity);
     gui.add(mainGroup);
 }
