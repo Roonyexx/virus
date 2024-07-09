@@ -27,7 +27,7 @@ void Field::update(Virus& virus)
         {
             if (person.getStatus() == Status::incubationPeriod || person.getStatus() == Status::Infected)
                 virus.infectionSpread(people, person);
-            person.updateStatus();
+            updateStatus(virus, person);
         }
     }
 

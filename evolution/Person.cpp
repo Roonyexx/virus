@@ -62,7 +62,7 @@ void Person::draw(sf::RenderWindow& window) const
         break;
 
     case Status::incubationPeriod:
-        shape.setFillColor({ 209, 86, 70 });
+        shape.setFillColor({ 180, 86, 70 });
         break;
 
     case Status::Infected:
@@ -102,6 +102,16 @@ sf::Vector2f Person::getPosition() const
 void Person::infect()
 {
 
+}
+
+uint32_t Person::getTimeInfected() const
+{
+    return timeInfected;
+}
+
+void Person::setTimeInfected(uint32_t time)
+{
+    timeInfected = time;
 }
 
 uint32_t Person::getSize()

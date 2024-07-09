@@ -4,9 +4,21 @@
 
 
 Simulation::Simulation(float mortality, float infProb, uint32_t incTime, uint32_t infDur, uint32_t walkRange)
-    : population{ sf::Vector2u(1280, 640), walkRange }, virus{ mortality, infProb, incTime, infDur }, window{sf::VideoMode{1280, 720}, "Virus", sf::Style::Titlebar | sf::Style::Close}
+    : population{ sf::Vector2u(1120, 720), walkRange }, virus{ mortality, infProb, incTime, infDur }, window{ sf::VideoMode{ 1280, 720 }, "Virus", sf::Style::Titlebar | sf::Style::Close }, walkRange{ walkRange }
 {
     gui.setWindow(window);
+}
+
+void Simulation::step()
+{
+    population.update(virus);
+}
+
+void Simulation::reset()
+{
+    Field newPopulation{ sf::Vector2u(1120, 720), walkRange };
+    population = newPopulation;
+    paused = true;
 }
 
 
@@ -16,7 +28,7 @@ void Simulation::run()
     while (window.isOpen()) 
     {
         handleEvents();
-        population.update(virus);
+        if(!paused) population.update(virus);
         window.clear({ 30, 30, 30 });
         population.draw(window);
         gui.draw();
@@ -40,8 +52,8 @@ void Simulation::initializeUI()
 {
     using namespace tgui;
     auto mainGroup = Group::create();
-    mainGroup->setPosition(0, 640);
-    mainGroup->setSize(1280, 80);
+    mainGroup->setPosition(1120, 0);
+    mainGroup->setSize(160, 720);
     
 
     auto createSliderWithLabel = 
@@ -71,10 +83,27 @@ void Simulation::initializeUI()
         return subGroup;
     };
 
-    auto mortality = createSliderWithLabel([virus = &virus](float value){ virus->setMortality(value); }, "mortality", { 0, 10 }, 0, 1, virus.getMortality(), 0.01f, 2);
-    auto infProb = createSliderWithLabel([virus = &virus](float value){ virus->setInfectionProbability(value); }, "infection probability", { 160, 10 }, 0, 1, virus.getInfectionProbability(), 0.01f, 2);
-    auto incTime = createSliderWithLabel([virus = &virus](float value){ virus->setIncubationTime(value); }, "incubation time", { 320, 10 }, 0, 50, virus.getIncubationTime(), 0);
-    auto infDur = createSliderWithLabel([virus = &virus](float value){ virus->setInfectionDuration(value); }, "infection duration", { 480, 10 }, 1, 50, virus.getInfectionDuration(), 0);
+    auto createButton = [](auto battonPressed, const String& label, const sf::Vector2f position) {
+        auto button = Button::create(label);
+        button->onClick(battonPressed);
+        button->setPosition(position.x, position.y);
+
+        button->setSize(45, 40);
+        return button;
+    };
+
+    auto reset = createButton([this]() { this->reset(); }, "reset", { 7, 10 });
+    auto start = createButton([this]() { this->paused = false; }, "start", { 57, 10 });
+    auto step = createButton([this]() { this->step(); }, "step", { 107, 10 });
+
+    mainGroup->add(reset);
+    mainGroup->add(start);
+    mainGroup->add(step);
+
+    auto mortality = createSliderWithLabel([virus = &virus](float value){ virus->setMortality(value); }, "mortality", { 0, 50 }, 0, 1, virus.getMortality(), 0.01f, 2);
+    auto infProb = createSliderWithLabel([virus = &virus](float value){ virus->setInfectionProbability(value); }, "infection probability", { 0, 100 }, 0, 1, virus.getInfectionProbability(), 0.01f, 2);
+    auto incTime = createSliderWithLabel([virus = &virus](float value){ virus->setIncubationTime(value); }, "incubation time", { 0, 150 }, 0, 50, virus.getIncubationTime(), 0);
+    auto infDur = createSliderWithLabel([virus = &virus](float value){ virus->setInfectionDuration(value); }, "infection duration", { 0, 200 }, 1, 50, virus.getInfectionDuration(), 0);
 
 
     mainGroup->add(mortality);

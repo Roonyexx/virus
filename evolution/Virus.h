@@ -29,5 +29,7 @@ public:
 
 	void setInfectionDuration(uint32_t infectionDuration);
 	uint32_t getInfectionDuration() const;
+	
+	friend void updateStatus(Virus& virus, Person& person);
 };
 
