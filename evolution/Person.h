@@ -20,6 +20,7 @@ private:
     static const uint32_t size{ 10 };
     std::pair<uint32_t, uint32_t> lowerPossibleBound, upperPossibleBound;
     Status status;
+    sf::RectangleShape shape;
 
 public:
 
@@ -29,9 +30,7 @@ public:
 
     std::pair<uint32_t, uint32_t> choosePosition() const;
 
-    void updateStatus();
-
-    void draw(sf::RenderWindow& window) const;
+    void draw(sf::RenderWindow& window) ;
 
     Status getStatus() const;
 

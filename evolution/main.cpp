@@ -12,7 +12,7 @@ int main() {
     const float infectionProbability = 0.4f;
     const uint32_t incubationTime = 7;
     const uint32_t infectionDuration = 8;
-    const uint32_t walkRange = 5;
+    const uint32_t walkRange = 3;
 
     Simulation simulation{ mortality, infectionProbability, incubationTime, infectionDuration, walkRange };
     simulation.run();

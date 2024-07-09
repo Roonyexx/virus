@@ -36,7 +36,7 @@ void Field::update(Virus& virus)
 void Field::draw(sf::RenderWindow& window)
 {
 
-    for (const auto& raw : people) 
-        for (const auto& person : raw)
+    for (auto& raw : people) 
+        for (auto& person : raw)
             person.draw(window);
 }

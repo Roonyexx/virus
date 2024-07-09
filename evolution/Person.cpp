@@ -2,8 +2,9 @@
 #include <iostream>
 
 Person::Person(uint32_t id, sf::Vector2f startPos, uint32_t walkRange, sf::Vector2u fieldSize)
-    : id{ id }, position{ startPos }, timeInfected{ }, status{ Status::Healthy }
+    : id{ id }, position{ startPos }, timeInfected{ }, status{ Status::Healthy }, shape{ sf::Vector2f{ size - 1, size - 1 } }
 { 
+    shape.setPosition(position);
     const uint32_t i{ static_cast<uint32_t>(startPos.y / size) }, j{ static_cast<uint32_t>(position.x / size) };
     const std::pair<uint32_t, uint32_t>
         lowerBound{ std::max(static_cast<int32_t>(i - walkRange), 0), std::max(static_cast<int32_t>(j - walkRange), 0) },
@@ -22,39 +23,15 @@ std::pair<uint32_t, uint32_t> Person::choosePosition() const
 }
 
 
-void Person::updateStatus()
+
+void Person::draw(sf::RenderWindow& window) 
 {
-    switch (status)
-    {
-    case Status::Healthy:
-        
-        break;
-
-    case Status::incubationPeriod:
-        
-        break;
-
-    case Status::Infected:
-        
-        break;
-
-    case Status::Recovered:
-        
-        break;
-
-    case Status::Dead:
-        
-        break;
-
-    default:
-        break;
-    }
+    window.draw(shape);
 }
 
-void Person::draw(sf::RenderWindow& window) const
+void Person::setStatus(Status status)
 {
-    sf::RectangleShape shape{ sf::Vector2f{ size - 1, size - 1 } };
-    shape.setPosition(position);
+    this->status = status;
     switch (status)
     {
     case Status::Healthy:
@@ -79,14 +56,6 @@ void Person::draw(sf::RenderWindow& window) const
     default:
         break;
     }
-
-    window.draw(shape);
-}
-
-void Person::setStatus(Status status)
-{
-
-    this->status = status;
 }
 
 Status Person::getStatus() const
