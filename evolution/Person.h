@@ -44,7 +44,6 @@ public:
 
     sf::Vector2f getPosition() const;
 
-    void infect();
 
     uint32_t getTimeInfected() const;
     void setTimeInfected(uint32_t time);

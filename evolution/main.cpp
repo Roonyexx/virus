@@ -1,7 +1,4 @@
 ﻿#include <SFML/Graphics.hpp>
-#include <vector>
-#include <cstdlib>
-#include <ctime>
 #include "Simulation.h"
 
 

@@ -31,3 +31,10 @@ void Hospital::setCapacity(uint32_t capacity)
 {
     this->capacity = capacity;
 }
+
+void Hospital::resetInHospital()
+{
+    inHospital = 0;
+}
+
+

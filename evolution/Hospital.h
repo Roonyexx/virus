@@ -22,6 +22,8 @@ public:
 
 	void setCapacity(uint32_t capacity);
 
+	void resetInHospital();
+
 	friend void updateStatus(Virus& virus, Person& person, Hospital* hospital);
 };
 

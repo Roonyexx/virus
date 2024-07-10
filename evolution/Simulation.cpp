@@ -1,6 +1,4 @@
 #include "Simulation.h"
-#include <iostream>
-
 
 
 Simulation::Simulation(float mortality, float infProb, uint32_t incTime, uint32_t infDur, uint32_t walkRange, uint32_t hospitalCapacity, uint32_t maskPercent, uint32_t contactsPerDay)
@@ -18,6 +16,7 @@ void Simulation::step()
 
 void Simulation::reset()
 {
+    hospital.resetInHospital();
     Field newPopulation{ sf::Vector2u(1120, 720), walkRange, &hospital, maskPercent };
     population = newPopulation;
     paused = true;
@@ -122,7 +121,7 @@ void Simulation::initializeUI()
         hospital->setCapacity(population->percentToPeople(round(value)));
     }, "hospital capacity", { 0, 300 }, 0, 100, 0, 0);
     auto maskPercent = createSliderWithLabel([this](float value) { this->maskPercent = round(value); }, "mask percent", { 0, 350 }, 0, 100, this->maskPercent, 0);
-    auto contactsPerDay = createSliderWithLabel([this](float value) { this->contactsPerDay = round(value); }, "contacts per day", { 0, 400 }, 0, 100, this->contactsPerDay, 0);
+    auto contactsPerDay = createSliderWithLabel([this](float value) { this->contactsPerDay = round(value); }, "contacts per day", { 0, 400 }, 0, 15, this->contactsPerDay, 0);
 
 
     mainGroup->add(mortality);
@@ -133,13 +132,6 @@ void Simulation::initializeUI()
     mainGroup->add(hospitalCapacity);
     mainGroup->add(maskPercent);
     mainGroup->add(contactsPerDay);
-
-
-
-
-
-
-
 
     auto statusGroup = Group::create();
     statusGroup->setPosition(10, 530);

@@ -1,8 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <vector>
-#include <cstdlib>
-#include <ctime>
 #include "Person.h"
 #include "Virus.h"
 

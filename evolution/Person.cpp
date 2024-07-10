@@ -1,5 +1,5 @@
 #include "Person.h"
-#include <iostream>
+
 
 bool Person::isMasked() const
 {
@@ -72,10 +72,6 @@ sf::Vector2f Person::getPosition() const
     return position;
 }
 
-void Person::infect()
-{
-
-}
 
 uint32_t Person::getTimeInfected() const
 {
