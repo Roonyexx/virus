@@ -20,6 +20,7 @@ private:
     uint32_t id;
     sf::Vector2f position;
     uint32_t timeInfected;
+    bool mask;
     static const uint32_t size{ 10 };
     std::pair<uint32_t, uint32_t> lowerPossibleBound, upperPossibleBound;
     Status status;
@@ -29,7 +30,9 @@ public:
 
     Person() { }
 
-    Person(uint32_t id, sf::Vector2f startPos, uint32_t walkRange, sf::Vector2u fieldSize);
+    bool isMasked() const;
+
+    Person(uint32_t id, sf::Vector2f startPos, uint32_t walkRange, sf::Vector2u fieldSize, bool mask = false);
 
     std::pair<uint32_t, uint32_t> choosePosition() const;
 

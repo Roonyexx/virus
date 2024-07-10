@@ -14,8 +14,10 @@ int main() {
     const uint32_t infectionDuration = 8;
     const uint32_t walkRange = 3;
     const uint32_t hospitalCapacity = 0;
+    const uint32_t maskPercent = 5;
+    const uint32_t contactsPerDay = 5;
 
-    Simulation simulation{ mortality, infectionProbability, incubationTime, infectionDuration, walkRange, hospitalCapacity };
+    Simulation simulation{ mortality, infectionProbability, incubationTime, infectionDuration, walkRange, hospitalCapacity, maskPercent, contactsPerDay };
     simulation.run();
     return 0;
 }

@@ -11,11 +11,12 @@ private:
     std::vector<std::vector<Person>> people;
     Hospital* hospital;
     sf::Vector2u numPeople;
+    
 
 public:
-    Field(sf::Vector2u windowSize, uint32_t walkRange, Hospital* hospital);
+    Field(sf::Vector2u windowSize, uint32_t walkRange, Hospital* hospital, uint32_t maskPercent);
 
-    void update(Virus& virus);
+    void update(Virus& virus, uint32_t contactsPerDay);
 
     void draw(sf::RenderWindow& window);
 

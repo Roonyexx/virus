@@ -3,22 +3,22 @@
 
 
 
-Simulation::Simulation(float mortality, float infProb, uint32_t incTime, uint32_t infDur, uint32_t walkRange, uint32_t hospitalCapacity)
-    : population{ sf::Vector2u(1120, 720), walkRange, &hospital }, virus{ mortality, infProb, incTime, infDur }, 
+Simulation::Simulation(float mortality, float infProb, uint32_t incTime, uint32_t infDur, uint32_t walkRange, uint32_t hospitalCapacity, uint32_t maskPercent, uint32_t contactsPerDay)
+    : population{ sf::Vector2u(1120, 720), walkRange, &hospital, maskPercent }, virus{ mortality, infProb, incTime, infDur }, 
     window{ sf::VideoMode{ 1280, 720 }, "Virus", sf::Style::Titlebar | sf::Style::Close }, walkRange{ walkRange },
-    hospital{ hospitalCapacity }
+    hospital{ hospitalCapacity }, maskPercent{ maskPercent }, contactsPerDay{ contactsPerDay }
 {
     gui.setWindow(window);
 }
 
 void Simulation::step()
 {
-    population.update(virus);
+    population.update(virus, contactsPerDay);
 }
 
 void Simulation::reset()
 {
-    Field newPopulation{ sf::Vector2u(1120, 720), walkRange, &hospital };
+    Field newPopulation{ sf::Vector2u(1120, 720), walkRange, &hospital, maskPercent };
     population = newPopulation;
     paused = true;
 }
@@ -30,7 +30,7 @@ void Simulation::run()
     while (window.isOpen()) 
     {
         handleEvents();
-        if(!paused) population.update(virus);
+        if(!paused) population.update(virus, contactsPerDay);
         window.clear({ 30, 30, 30 });
         population.draw(window);
         gui.draw();
@@ -121,6 +121,9 @@ void Simulation::initializeUI()
     auto hospitalCapacity = createSliderWithLabel([hospital = &hospital, population = &population](float value) { 
         hospital->setCapacity(population->percentToPeople(round(value)));
     }, "hospital capacity", { 0, 300 }, 0, 100, 0, 0);
+    auto maskPercent = createSliderWithLabel([this](float value) { this->maskPercent = round(value); }, "mask percent", { 0, 350 }, 0, 100, this->maskPercent, 0);
+    auto contactsPerDay = createSliderWithLabel([this](float value) { this->contactsPerDay = round(value); }, "contacts per day", { 0, 400 }, 0, 100, this->contactsPerDay, 0);
+
 
     mainGroup->add(mortality);
     mainGroup->add(infProb);
@@ -128,5 +131,48 @@ void Simulation::initializeUI()
     mainGroup->add(infDur);
     mainGroup->add(walkRange);
     mainGroup->add(hospitalCapacity);
+    mainGroup->add(maskPercent);
+    mainGroup->add(contactsPerDay);
+
+
+
+
+
+
+
+
+    auto statusGroup = Group::create();
+    statusGroup->setPosition(10, 530);
+    statusGroup->setSize(160, 200);
+
+    auto createStatusWidget = [](const String& text, const sf::Color color, const Vector2f position) {
+        auto statusGroup = Group::create();
+        statusGroup->setPosition(position);
+
+        auto colorBox = Panel::create({ 20, 20 });
+        colorBox->getRenderer()->setBackgroundColor(color);
+        colorBox->setPosition(0, 0);
+
+        auto label = Label::create(text);
+        label->setPosition(22, 3);
+        label->setTextSize(12);
+        label->getRenderer()->setTextStyle(TextStyle::Bold);
+        label->getRenderer()->setTextColor(sf::Color::White);
+
+        statusGroup->add(colorBox);
+        statusGroup->add(label);
+
+        return statusGroup;
+    };
+
+    statusGroup->add(createStatusWidget("Healthy", { 238, 238, 238 }, { 0, 0 }));
+    statusGroup->add(createStatusWidget("Incubation Period", { 242, 209, 213 }, { 0, 30 }));
+    statusGroup->add(createStatusWidget("Infected", { 255, 0, 0 }, { 0, 60 }));
+    statusGroup->add(createStatusWidget("In Hospital", { 30, 199, 85 }, { 0, 90 }));
+    statusGroup->add(createStatusWidget("Recovered", { 50, 205, 209 }, { 0, 120 }));
+    statusGroup->add(createStatusWidget("Dead", { 20, 1, 1 }, { 0, 150 }));
+
+    mainGroup->add(statusGroup);
+
     gui.add(mainGroup);
 }

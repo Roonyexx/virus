@@ -1,6 +1,6 @@
 #include "Field.h"
 
-Field::Field(sf::Vector2u windowSize, uint32_t walkRange, Hospital* hospital) : hospital { hospital }
+Field::Field(sf::Vector2u windowSize, uint32_t walkRange, Hospital* hospital, uint32_t maskPercent) : hospital { hospital }
 {
     const sf::Vector2u numPeople{ windowSize.x / Person::getSize(), windowSize.y / Person::getSize() };
     this->numPeople = numPeople;
@@ -12,20 +12,19 @@ Field::Field(sf::Vector2u windowSize, uint32_t walkRange, Hospital* hospital) : 
         people[i].resize(numPeople.x);
         for (uint32_t j{ }; j < numPeople.x; ++j)
         {
-            people[i][j] = Person{ id++, sf::Vector2f(j * Person::getSize(), i * Person::getSize()), walkRange, numPeople };
-            //if(i == numPeople.y / 2 && j == numPeople.x / 2) people[i][j].setStatus(Status::incubationPeriod);
+            people[i][j] = Person{ id++, sf::Vector2f(j * Person::getSize(), i * Person::getSize()), walkRange, numPeople, randomEvent(maskPercent / 100.f)};
         }
     }
 }
 
-void Field::update(Virus& virus)
+void Field::update(Virus& virus, uint32_t contactsPerDay)
 {
     for (auto& raw : people) 
     {
         for (auto& person : raw)
         {
             if (person.getStatus() == Status::incubationPeriod || person.getStatus() == Status::Infected)
-                virus.infectionSpread(people, person);
+                virus.infectionSpread(people, person, contactsPerDay);
             updateStatus(virus, person, hospital);
             if (person.getStatus() == Status::inHospital) hospital->Heal(person, virus.getMortality());
         }

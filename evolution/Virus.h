@@ -16,7 +16,7 @@ public:
 	Virus(float mortality, float infectionProbability, uint32_t incubationTime, uint32_t infectionDuration);
 	~Virus() {}
 
-	void infectionSpread(std::vector<std::vector<Person>>& people, Person& person);
+	void infectionSpread(std::vector<std::vector<Person>>& people, Person& person, uint32_t contactsPerDay);
 
 	void setMortality(float mortality);
 	float getMortality() const;

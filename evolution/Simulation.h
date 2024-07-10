@@ -15,6 +15,8 @@ private:
     Virus virus;
     Hospital hospital;
     uint32_t walkRange;
+    uint32_t maskPercent;
+    uint32_t contactsPerDay;
     bool paused = true;
     sf::RenderWindow window;
     tgui::Gui gui;
@@ -22,7 +24,7 @@ private:
     void step();
     void reset();
 public:
-    Simulation(float mortality, float infProb, uint32_t incTime, uint32_t infDur, uint32_t walkRange, uint32_t hospitalCapacity); 
+    Simulation(float mortality, float infProb, uint32_t incTime, uint32_t infDur, uint32_t walkRange, uint32_t hospitalCapacity, uint32_t maskPercent, uint32_t contactsPerDay); 
 
     void run();
 

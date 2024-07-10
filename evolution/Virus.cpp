@@ -7,16 +7,24 @@ Virus::Virus(float mortality, float infectionProbability, uint32_t incubationTim
 	mortality{ mortality }, infectionProbability{ infectionProbability }, incubationTime{ incubationTime }, infectionDuration{ infectionDuration }
 { }
 
-void Virus::infectionSpread(std::vector<std::vector<Person>>& people, Person& person)
+void Virus::infectionSpread(std::vector<std::vector<Person>>& people, Person& person, uint32_t contactsPerDay)
 {
 
-	if (person.getStatus() != Status::incubationPeriod && person.getStatus() != Status::Infected) return;
-
-	const auto positionToInfect{ person.choosePosition() };
-
-	if (people[positionToInfect.first][positionToInfect.second].getStatus() == Status::Healthy)
+	if (person.getStatus() != Status::incubationPeriod && person.getStatus() != Status::Infected || person.getTimeInfected() == 0) return;
+	for (int i{ }; i < contactsPerDay; i++)
 	{
-		if (randomEvent(infectionProbability)) people[positionToInfect.first][positionToInfect.second].setStatus(Status::incubationPeriod);
+		const auto positionToInfect{ person.choosePosition() };
+		Person& other{ people[positionToInfect.first][positionToInfect.second] };
+
+		if (other.getStatus() == Status::Healthy)
+		{
+			int divider{ 2 * ((int)person.isMasked() + (int)other.isMasked()) };
+			if (divider == 0) divider = 1;
+
+			float finalInfectionProbability{ infectionProbability / divider };
+
+			if (randomEvent(finalInfectionProbability)) other.setStatus(Status::incubationPeriod);
+		}
 	}
 }
 
@@ -65,12 +73,12 @@ void updateStatus(Virus& virus, Person& person, Hospital* hospital)
 	switch (person.status)
 	{
 	case Status::incubationPeriod:
-		if (person.timeInfected < virus.incubationTime)
+		if (person.timeInfected + 1 < virus.incubationTime)
 			person.timeInfected++;
-		else if (person.timeInfected == virus.incubationTime)
+		else if (person.timeInfected + 1 >= virus.incubationTime)
 			{ 
 				person.setStatus(Status::Infected); 
-				person.timeInfected = 0; 
+				person.timeInfected = 1; 
 				if (randomEvent(0.7f)) hospital->addPerson(person);
 			}
 		break;
@@ -79,7 +87,7 @@ void updateStatus(Virus& virus, Person& person, Hospital* hospital)
 	case Status::inHospital:
 		if (person.timeInfected < virus.infectionDuration)
 			person.timeInfected++;
-		else if (person.timeInfected == virus.infectionDuration)
+		else if (person.timeInfected >= virus.infectionDuration)
 		{
 			if (person.getStatus() == Status::inHospital) hospital->inHospital--;
 			if (randomEvent(virus.mortality))

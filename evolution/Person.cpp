@@ -1,8 +1,14 @@
 #include "Person.h"
 #include <iostream>
 
-Person::Person(uint32_t id, sf::Vector2f startPos, uint32_t walkRange, sf::Vector2u fieldSize)
-    : id{ id }, position{ startPos }, timeInfected{ }, status{ Status::Healthy }, shape{ sf::Vector2f{ size - 1, size - 1 } }
+bool Person::isMasked() const
+{
+    return mask;
+}
+
+Person::Person(uint32_t id, sf::Vector2f startPos, uint32_t walkRange, sf::Vector2u fieldSize, bool mask)
+    : id{ id }, position{ startPos }, timeInfected{ }, status{ Status::Healthy }, 
+    shape{ sf::Vector2f{ size - 1, size - 1 } }, mask{ mask }
 { 
     this->setWalkRange(walkRange, fieldSize);
     shape.setPosition(position);
@@ -33,7 +39,7 @@ void Person::setStatus(Status status)
         break;
 
     case Status::incubationPeriod:
-        shape.setFillColor({ 180, 86, 70 });
+        shape.setFillColor({ 242, 209, 213 });
         break;
 
     case Status::Infected:
